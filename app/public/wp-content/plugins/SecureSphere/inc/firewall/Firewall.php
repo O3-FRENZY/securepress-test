@@ -15,8 +15,13 @@ class SecureSphere_Firewall {
     private $db;
     
     // Option keys
-    const OPT_BLOCKED_IPS = 'securesphere_blocked_ips';
+    const OPT_BLOCKED_IPS = 'securesphere_blocked_ips'; // May become less relevant for direct use if all blocks go to DB
     const OPT_WHITELISTED_IPS = 'securesphere_whitelisted_ips';
+
+    // Rate Limiting Constants (Phase 1: Hardcoded, future: from settings)
+    const RATE_LIMIT_THRESHOLD = 100; // e.g., 100 requests
+    const RATE_LIMIT_PERIOD = 60;    // e.g., per 60 seconds
+    const RATE_LIMIT_BLOCK_DURATION = 300; // e.g., block for 300 seconds (5 minutes)
     
     public static function init() {
         if (null === self::$instance) {
@@ -35,24 +40,305 @@ class SecureSphere_Firewall {
         add_action('wp_login_failed', array($this, 'handle_failed_login'));
         add_action('xmlrpc_call', array($this, 'check_xmlrpc_request'));
         add_action('rest_api_init', array($this, 'check_rest_api_request'));
+
+        // Firewall rule update hook
+        add_action('securesphere_daily_firewall_rule_update_hook', array($this, 'fetch_and_update_firewall_rules_from_file'));
+        if (!wp_next_scheduled('securesphere_daily_firewall_rule_update_hook')) {
+            wp_schedule_event(time(), 'daily', 'securesphere_daily_firewall_rule_update_hook');
+        }
+    }
+
+    public function fetch_and_update_firewall_rules_from_file() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'securesphere_firewall_rules';
+        $json_file_path = SECURESPHERE_PLUGIN_DIR . 'firewall/rules.json';
+
+        if (!file_exists($json_file_path)) {
+            error_log('SecureSphere Firewall Rule Update: JSON file not found at ' . $json_file_path);
+            set_transient('securesphere_firewall_rule_update_status', 'error_file_not_found', HOUR_IN_SECONDS);
+            return false;
+        }
+
+        $json_content = file_get_contents($json_file_path);
+        if ($json_content === false) {
+            error_log('SecureSphere Firewall Rule Update: Could not read JSON file.');
+            set_transient('securesphere_firewall_rule_update_status', 'error_file_read', HOUR_IN_SECONDS);
+            return false;
+        }
+
+        $rules = json_decode($json_content, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('SecureSphere Firewall Rule Update: Invalid JSON in rules file. Error: ' . json_last_error_msg());
+            set_transient('securesphere_firewall_rule_update_status', 'error_json_invalid', HOUR_IN_SECONDS);
+            return false;
+        }
+
+        if (empty($rules) || !is_array($rules)) {
+            error_log('SecureSphere Firewall Rule Update: No rules found or invalid format in JSON file.');
+            set_transient('securesphere_firewall_rule_update_status', 'error_no_rules_in_file', HOUR_IN_SECONDS);
+            return false;
+        }
+
+        $updated_count = 0;
+        $inserted_count = 0;
+        $current_time = current_time('mysql');
+
+        foreach ($rules as $rule) {
+            if (empty($rule['rule_id']) || empty($rule['type']) || empty($rule['pattern']) || !isset($rule['action']) || empty($rule['date_added'])) {
+                error_log('SecureSphere Firewall Rule Update: Skipping invalid rule entry: ' . print_r($rule, true));
+                continue;
+            }
+
+            $data = [
+                'type' => sanitize_text_field($rule['type']),
+                'pattern' => $rule['pattern'], // Pattern can be complex
+                'description' => isset($rule['description']) ? sanitize_textarea_field($rule['description']) : '',
+                'severity' => isset($rule['severity']) ? sanitize_text_field($rule['severity']) : 'medium',
+                'action' => sanitize_text_field($rule['action']),
+                'date_added' => gmdate('Y-m-d H:i:s', strtotime($rule['date_added'])), // Ensure GMT
+                'last_updated' => $current_time,
+                'enabled' => isset($rule['enabled']) ? (int)(bool)$rule['enabled'] : 1,
+            ];
+            $where = ['rule_id' => sanitize_text_field($rule['rule_id'])];
+
+            $existing = $wpdb->get_row($wpdb->prepare("SELECT id FROM $table_name WHERE rule_id = %s", $where['rule_id']));
+
+            if ($existing) {
+                $result = $wpdb->update($table_name, $data, $where);
+                if ($result !== false) $updated_count++;
+            } else {
+                $data['rule_id'] = $where['rule_id'];
+                $result = $wpdb->insert($table_name, $data);
+                if ($result !== false) $inserted_count++;
+            }
+
+            if ($result === false) {
+                 error_log('SecureSphere Firewall Rule Update: DB error for rule ID ' . $where['rule_id'] . ' - ' . $wpdb->last_error);
+            }
+        }
+
+        update_option('securesphere_last_firewall_rule_update_time', $current_time);
+        update_option('securesphere_firewall_rule_version', 'file_' . date('YmdHis', filemtime($json_file_path)));
+        set_transient('securesphere_firewall_rule_update_status', "success_inserted_{$inserted_count}_updated_{$updated_count}", HOUR_IN_SECONDS);
+        error_log("SecureSphere Firewall Rule Update: Success. Inserted: {$inserted_count}, Updated: {$updated_count}");
+        return true;
     }
     
     public function check_request() {
         if (is_admin() || wp_doing_ajax() || wp_doing_cron()) {
             return;
         }
-        
+
         $ip = $this->get_client_ip();
-        
-        // Check if IP is whitelisted
+        $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $request_method = $_SERVER['REQUEST_METHOD'] ?? '';
+
+        // 1. Check if IP is whitelisted - highest priority
         if ($this->is_ip_whitelisted($ip)) {
             return;
         }
-        
-        // Check if IP is blocked
-        if ($this->is_ip_blocked($ip)) {
-            $this->block_request($ip);
+
+        // 2. Process rules from the database (the new "feed")
+        $db_rules = $this->load_firewall_rules_from_db();
+        if (!empty($db_rules)) {
+            foreach ($db_rules as $rule) {
+                $match = false;
+                switch ($rule['type']) {
+                    case 'ip_block':
+                        if ($ip === $rule['pattern']) {
+                            $match = true;
+                        }
+                        break;
+                    case 'ip_range_block':
+                        // Basic CIDR check (IPv4 only for now)
+                        if ($this->is_ip_in_range($ip, $rule['pattern'])) {
+                            $match = true;
+                        }
+                        break;
+                    case 'user_agent_block':
+                        if (preg_match($rule['pattern'], $user_agent)) {
+                            $match = true;
+                        }
+                        break;
+                    case 'request_pattern':
+                        if (preg_match($rule['pattern'], $request_uri)) {
+                            $match = true;
+                        }
+                        break;
+                    // SQLi/XSS patterns will be handled in a separate, more specific check for now
+                }
+
+                if ($match) {
+                    $this->handle_matched_rule($rule, $ip, $request_uri, $request_method, $user_agent);
+                    // If action was 'block', handle_matched_rule would have called wp_die
+                }
+            }
         }
+        
+        // 3. Check if IP is already blocked (manual, login failures, rate limits)
+        // This check is important to run after DB rules if DB rules might have log-only actions.
+        // If a DB rule already blocked, this won't be reached.
+        if ($this->is_ip_blocked($ip)) {
+            $this->block_request($ip, "Previously Blocked IP"); // Reason might need to be fetched
+        }
+
+        // 4. SQLi/XSS Specific Parameter Checks (after general request_pattern rules)
+        $this->check_request_parameters_for_sqli_xss($db_rules, $ip, $request_uri, $request_method, $user_agent);
+        // If request is blocked by SQLi/XSS rules, execution would have stopped in handle_matched_rule.
+
+        // 5. Rate Limiting Check
+        $this->check_and_apply_rate_limit($ip);
+        // If rate limited and blocked, execution stops here.
+    }
+
+    private function check_and_apply_rate_limit($ip) {
+        // Use class constants for rate limit parameters
+        $threshold = self::RATE_LIMIT_THRESHOLD;
+        $period = self::RATE_LIMIT_PERIOD;
+        $block_duration = self::RATE_LIMIT_BLOCK_DURATION;
+
+        $transient_key = 'ss_rl_count_' . md5($ip);
+        $request_count = get_transient($transient_key);
+
+        if (false === $request_count) {
+            set_transient($transient_key, 1, $period);
+        } else {
+            $request_count++;
+            set_transient($transient_key, $request_count, $period);
+
+            if ($request_count > $threshold) {
+                // Check if this IP is already blocked for rate limiting to avoid redundant blocking/logging
+                global $wpdb;
+                $blocked_ips_table = $wpdb->prefix . 'securesphere_blocked_ips';
+                $is_already_rate_limited = $wpdb->get_var($wpdb->prepare(
+                    "SELECT id FROM {$blocked_ips_table} WHERE ip = %s AND reason LIKE %s AND blocked_until > NOW()",
+                    $ip,
+                    'Rate Limit Exceeded%' // Use LIKE to catch if it was already blocked for this
+                ));
+
+                if (!$is_already_rate_limited) {
+                    $reason = sprintf('Rate Limit Exceeded: %d requests in %d seconds.', $request_count, $period);
+                    $this->block_ip($ip, $reason, $block_duration);
+                    // block_ip() calls block_request() which logs and dies.
+                }
+                // If already blocked for rate limiting, block_request() in main check_request will catch it,
+                // or if the block expired, a new one will be placed.
+            }
+        }
+    }
+
+    private function check_request_parameters_for_sqli_xss($rules, $ip, $request_uri, $request_method, $user_agent) {
+        $sqli_rules = array_filter($rules, function($rule) {
+            return $rule['type'] === 'sqli_pattern';
+        });
+        $xss_rules = array_filter($rules, function($rule) {
+            return $rule['type'] === 'xss_pattern';
+        });
+
+        if (empty($sqli_rules) && empty($xss_rules)) {
+            return;
+        }
+
+        $parameters_to_check = [];
+        // Add GET parameters
+        if (!empty($_GET)) {
+            $parameters_to_check = array_merge($parameters_to_check, $_GET);
+        }
+        // Add POST parameters
+        if (!empty($_POST)) {
+            $parameters_to_check = array_merge($parameters_to_check, $_POST);
+        }
+        // Optionally, could add COOKIE parameters here too, but be cautious: $_COOKIE
+
+        foreach ($parameters_to_check as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                // Recursively check arrays/objects, or simply skip/stringify them
+                // For simplicity in Phase 1, we can skip complex types or just check their stringified version.
+                // To keep it simple now, we'll just check if it's a string.
+                if (is_array($value)) { // Basic handling for arrays of strings
+                    foreach($value as $sub_value) {
+                        if (is_string($sub_value)) {
+                             $this->apply_sqli_xss_rules_to_value($sub_value, $sqli_rules, $xss_rules, $ip, $request_uri, $request_method, $user_agent, $key);
+                        }
+                    }
+                    continue;
+                } elseif(!is_string($value)) {
+                    continue;
+                }
+            }
+            $this->apply_sqli_xss_rules_to_value((string)$value, $sqli_rules, $xss_rules, $ip, $request_uri, $request_method, $user_agent, $key);
+        }
+    }
+
+    private function apply_sqli_xss_rules_to_value($value, $sqli_rules, $xss_rules, $ip, $request_uri, $request_method, $user_agent, $param_key) {
+        // Check SQLi rules
+        foreach ($sqli_rules as $rule) {
+            if (preg_match($rule['pattern'], $value)) {
+                $rule_with_param = $rule; // Clone rule to add parameter context
+                $rule_with_param['description'] = sprintf('%s (Parameter: %s)', $rule['description'], $param_key);
+                $this->handle_matched_rule($rule_with_param, $ip, $request_uri, $request_method, $user_agent);
+                // If blocked, execution stops here.
+            }
+        }
+        // Check XSS rules
+        foreach ($xss_rules as $rule) {
+            if (preg_match($rule['pattern'], $value)) {
+                 $rule_with_param = $rule;
+                 $rule_with_param['description'] = sprintf('%s (Parameter: %s)', $rule['description'], $param_key);
+                $this->handle_matched_rule($rule_with_param, $ip, $request_uri, $request_method, $user_agent);
+                // If blocked, execution stops here.
+            }
+        }
+    }
+
+
+    private function handle_matched_rule($rule, $ip, $request_uri, $request_method, $user_agent) {
+        $reason = sprintf('Matched Rule ID: %s (%s)', $rule['rule_id'], $rule['description']);
+
+        $this->db->log_firewall_event([
+            'ip_address' => $ip,
+            'request_uri' => $request_uri,
+            'request_method' => $request_method,
+            'user_agent' => $user_agent,
+            'status' => $rule['action'], // 'block' or 'log'
+            'reason' => $reason,
+            'rule_id' => $rule['rule_id'] ?? 'N/A' // Ensure rule_id is present
+        ]);
+
+        if ($rule['action'] === 'block') {
+            $this->block_request($ip, $reason); // block_request calls wp_die
+        }
+    }
+
+    public function load_firewall_rules_from_db() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'securesphere_firewall_rules';
+        // Only load enabled rules
+        $results = $wpdb->get_results("SELECT * FROM {$table_name} WHERE enabled = 1", ARRAY_A);
+
+        if ($wpdb->last_error) {
+            error_log("SecureSphere DB Error loading firewall rules: " . $wpdb->last_error);
+            return [];
+        }
+        return $results ?: [];
+    }
+
+    // Helper function for basic IPv4 CIDR check
+    private function is_ip_in_range($ip, $range) {
+        if (strpos($range, '/') === false) {
+            // Not a CIDR range, treat as single IP for this basic check
+            return $ip === $range;
+        }
+        list($subnet, $bits) = explode('/', $range);
+        if ($bits === null || !ctype_digit($bits) || $bits < 0 || $bits > 32) {
+            return false; // Invalid CIDR bits
+        }
+        $ip = ip2long($ip);
+        $subnet = ip2long($subnet);
+        $mask = -1 << (32 - $bits);
+        $subnet &= $mask; // Ensure subnet is actually the network address
+        return ($ip & $mask) == $subnet;
     }
     
     public function get_client_ip() {
@@ -84,9 +370,21 @@ class SecureSphere_Firewall {
         return !empty($blocked);
     }
     
-    public function block_request($ip) {
-        $this->logger->log('Blocked request from IP: ' . $ip, 'warning');
-        wp_die('Access Denied', 'Security', array('response' => 403));
+    public function block_request($ip, $reason = 'Access Denied by Firewall Rule') {
+        // Log the event via Database class, which should be the central place for logging firewall events
+        $this->db->log_firewall_event([
+            'ip_address' => $ip,
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+            'request_method' => $_SERVER['REQUEST_METHOD'] ?? '',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'status' => 'blocked', // General status
+            'reason' => $reason,   // Specific reason for the block
+        ]);
+
+        // Use the main logger for a simple textual log as well if desired, but DB log is primary
+        $this->logger->log('Blocked request from IP: ' . $ip . '. Reason: ' . $reason, 'warning');
+
+        wp_die(esc_html($reason), 'Access Denied', array('response' => 403));
     }
     
     public function deactivate() {
@@ -329,21 +627,56 @@ class SecureSphere_Firewall {
 
         try {
             // Get firewall status
-            $firewall_enabled = get_option('securesphere_firewall_enabled', true);
-            $blocked_ips = $this->db->get_blocked_ips();
+            $firewall_enabled = get_option('securesphere_firewall_enabled', true); // This option should be primary toggle
+            $blocked_ips = $this->db->get_blocked_ips(); // From `securesphere_blocked_ips` table
+
+            // Rule update status
+            $last_rule_update = get_option('securesphere_last_firewall_rule_update_time', 'Never');
+            $rule_version = get_option('securesphere_firewall_rule_version', 'N/A');
+            $rule_update_status_transient = get_transient('securesphere_firewall_rule_update_status');
+
+            global $wpdb;
+            $rules_table = $wpdb->prefix . 'securesphere_firewall_rules';
+            $active_rules_count = $wpdb->get_var("SELECT COUNT(*) FROM {$rules_table} WHERE enabled = 1");
+
             ?>
             <div class="wrap">
                 <h1>SecureSphere Firewall</h1>
-                
+
+                <?php if (isset($_GET['message'])) : ?>
+                    <div class="notice notice-success is-dismissible">
+                        <p><?php echo esc_html(urldecode($_GET['message'])); ?></p>
+                    </div>
+                <?php endif; ?>
                 <?php if (isset($_GET['error'])) : ?>
-                    <div class="notice notice-error">
+                    <div class="notice notice-error is-dismissible">
                         <p><?php echo esc_html(urldecode($_GET['error'])); ?></p>
                     </div>
                 <?php endif; ?>
 
+                <?php if ($rule_update_status_transient): ?>
+                    <?php
+                    $status_parts = explode('_', $rule_update_status_transient);
+                    $status_type = $status_parts[0];
+                    if ($status_type === 'success'):
+                        $inserted = $status_parts[2];
+                        $updated = $status_parts[4];
+                    ?>
+                        <div class="notice notice-success is-dismissible">
+                            <p>Firewall rule update successful. Inserted: <?php echo esc_html($inserted); ?>, Updated: <?php echo esc_html($updated); ?>.</p>
+                        </div>
+                    <?php elseif (strpos($rule_update_status_transient, 'error_') === 0): ?>
+                        <div class="notice notice-error is-dismissible">
+                            <p>Firewall rule update error: <?php echo esc_html(str_replace('error_', '', $rule_update_status_transient)); ?>. Check PHP error logs for details.</p>
+                        </div>
+                    <?php endif; ?>
+                    <?php delete_transient('securesphere_firewall_rule_update_status'); ?>
+                <?php endif; ?>
+
+
                 <div class="ss-card">
                     <div class="ss-card-header">
-                        <h2>Firewall Protection</h2>
+                        <h2>Firewall Status & Overview</h2>
                         <div class="ss-card-actions">
                             <label class="ss-switch">
                                 <input type="checkbox" id="firewall-toggle" <?php checked($firewall_enabled); ?>>
@@ -364,11 +697,28 @@ class SecureSphere_Firewall {
                                     <p><?php echo $firewall_enabled ? 'Active' : 'Inactive'; ?></p>
                                 </div>
                             </div>
+                             <div class="ss-status-card">
+                                <div class="ss-status-icon"><span class="dashicons dashicons-list-view"></span></div>
+                                <div class="ss-status-info">
+                                    <h3>Active Rules</h3>
+                                    <p><?php echo esc_html($active_rules_count); ?> loaded</p>
+                                </div>
+                            </div>
+                            <div class="ss-status-card">
+                                <div class="ss-status-icon"><span class="dashicons dashicons-cloud-upload"></span></div>
+                                <div class="ss-status-info">
+                                    <h3>Rule Feed</h3>
+                                    <p>Last Update: <?php echo esc_html($last_rule_update); ?><br>
+                                       Version: <?php echo esc_html($rule_version); ?><br>
+                                       Next Update: <?php echo esc_html(wp_next_scheduled('securesphere_daily_firewall_rule_update_hook') ? date('Y-m-d H:i:s', wp_next_scheduled('securesphere_daily_firewall_rule_update_hook')) : 'Not Scheduled'); ?>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Blocked IPs -->
                         <div class="ss-section">
-                            <h3>Currently Blocked IPs</h3>
+                            <h3>Currently Blocked IPs (Manual, Rate Limit, Login Failures etc.)</h3>
                             <?php if (!empty($blocked_ips)) : ?>
                                 <div class="ss-table-responsive">
                                     <table class="ss-table">

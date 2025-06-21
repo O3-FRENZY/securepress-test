@@ -62,7 +62,8 @@ function securesphere_activate() {
             $wpdb->prefix . 'securesphere_user_activity',
             $wpdb->prefix . 'securesphere_performance_metrics',
             $wpdb->prefix . 'securesphere_blocked_ips',
-            $wpdb->prefix . 'securesphere_malware_signatures' // Ensure new table is also dropped on error
+            $wpdb->prefix . 'securesphere_malware_signatures',
+            $wpdb->prefix . 'securesphere_firewall_rules' // Ensure new firewall rules table is also dropped on error
         );
         
         foreach ($tables_to_drop as $table) {

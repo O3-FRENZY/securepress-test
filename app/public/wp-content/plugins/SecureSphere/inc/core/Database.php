@@ -31,7 +31,8 @@ class SecureSphere_Database {
             'user_activity' => $wpdb->prefix . 'securesphere_user_activity',
             'performance_metrics' => $wpdb->prefix . 'securesphere_performance_metrics',
             'blocked_ips' => $wpdb->prefix . 'securesphere_blocked_ips',
-            'malware_signatures' => $wpdb->prefix . 'securesphere_malware_signatures'
+            'malware_signatures' => $wpdb->prefix . 'securesphere_malware_signatures',
+            'firewall_rules' => $wpdb->prefix . 'securesphere_firewall_rules'
         );
     }
     
@@ -103,12 +104,33 @@ class SecureSphere_Database {
             KEY severity (severity)
         ) $charset_collate;";
 
+        // Create firewall rules table
+        $firewall_rules_table = $this->tables['firewall_rules'];
+        $firewall_rules_sql = "CREATE TABLE IF NOT EXISTS $firewall_rules_table (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            rule_id varchar(255) NOT NULL,
+            type varchar(50) NOT NULL COMMENT 'e.g., ip_block, user_agent_block, request_pattern, sqli_pattern, xss_pattern',
+            pattern text NOT NULL,
+            description text,
+            severity varchar(50) NOT NULL DEFAULT 'medium',
+            action varchar(50) NOT NULL DEFAULT 'block' COMMENT 'e.g., block, log',
+            date_added datetime NOT NULL,
+            last_updated datetime NOT NULL,
+            enabled tinyint(1) NOT NULL DEFAULT 1,
+            PRIMARY KEY  (id),
+            UNIQUE KEY rule_id (rule_id),
+            KEY type (type),
+            KEY severity (severity),
+            KEY enabled (enabled)
+        ) $charset_collate;";
+
         // Execute each table creation separately with error handling
-        $tables = array(
+        $tables_sql = array( // Renamed from $tables to $tables_sql to avoid conflict
             'logs' => $logs_sql,
             'blocked_ips' => $blocked_ips_sql,
             'firewall_logs' => $firewall_logs_sql,
-            'malware_signatures' => $malware_signatures_sql
+            'malware_signatures' => $malware_signatures_sql,
+            'firewall_rules' => $firewall_rules_sql
         );
 
         foreach ($tables_sql as $table_key => $sql) {
