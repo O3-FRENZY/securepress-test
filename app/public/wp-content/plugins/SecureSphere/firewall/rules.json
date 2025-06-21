@@ -1,0 +1,65 @@
+[
+  {
+    "rule_id": "ip_block_known_bad_1",
+    "type": "ip_block",
+    "pattern": "1.2.3.4",
+    "description": "Known malicious IP address.",
+    "severity": "critical",
+    "action": "block",
+    "date_added": "2023-10-27 10:00:00"
+  },
+  {
+    "rule_id": "ip_range_block_test_1",
+    "type": "ip_range_block",
+    "pattern": "192.168.0.0/24",
+    "description": "Test IP range block (example, likely not for production).",
+    "severity": "medium",
+    "action": "block",
+    "date_added": "2023-10-27 10:01:00"
+  },
+  {
+    "rule_id": "ua_block_bad_bot_1",
+    "type": "user_agent_block",
+    "pattern": "/(BadBot|EvilScraper)/i",
+    "description": "Block known bad bots by User-Agent.",
+    "severity": "high",
+    "action": "block",
+    "date_added": "2023-10-27 10:02:00"
+  },
+  {
+    "rule_id": "req_pattern_block_php_vuln_1",
+    "type": "request_pattern",
+    "pattern": "/wp-content/plugins/vulnerable-plugin/exploit\\.php/i",
+    "description": "Block access to a known vulnerable plugin exploit path.",
+    "severity": "critical",
+    "action": "block",
+    "date_added": "2023-10-27 10:03:00"
+  },
+  {
+    "rule_id": "sqli_pattern_basic_1",
+    "type": "sqli_pattern",
+    "pattern": "/UNION\\s+SELECT/i",
+    "description": "Basic SQL Injection attempt (UNION SELECT).",
+    "severity": "critical",
+    "action": "block",
+    "date_added": "2023-10-27 10:04:00"
+  },
+  {
+    "rule_id": "xss_pattern_basic_1",
+    "type": "xss_pattern",
+    "pattern": "/<script\\b[^>]*>[^<]*(?:<\\/script>|$)/i",
+    "description": "Basic XSS attempt (script tag).",
+    "severity": "high",
+    "action": "block",
+    "date_added": "2023-10-27 10:05:00"
+  },
+  {
+    "rule_id": "log_only_test_ua",
+    "type": "user_agent_block",
+    "pattern": "/(TestLogBot)/i",
+    "description": "Log requests from TestLogBot.",
+    "severity": "low",
+    "action": "log",
+    "date_added": "2023-10-27 10:06:00"
+  }
+]

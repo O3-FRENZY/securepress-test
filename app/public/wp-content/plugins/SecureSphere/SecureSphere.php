@@ -54,17 +54,19 @@ function securesphere_activate() {
         
         // Clean up any partially created tables
         global $wpdb;
-        $tables = array(
+        $tables_to_drop = array(
             $wpdb->prefix . 'securesphere_logs',
             $wpdb->prefix . 'securesphere_firewall_logs',
             $wpdb->prefix . 'securesphere_scan_results',
             $wpdb->prefix . 'securesphere_security_events',
             $wpdb->prefix . 'securesphere_user_activity',
             $wpdb->prefix . 'securesphere_performance_metrics',
-            $wpdb->prefix . 'securesphere_blocked_ips'
+            $wpdb->prefix . 'securesphere_blocked_ips',
+            $wpdb->prefix . 'securesphere_malware_signatures',
+            $wpdb->prefix . 'securesphere_firewall_rules' // Ensure new firewall rules table is also dropped on error
         );
         
-        foreach ($tables as $table) {
+        foreach ($tables_to_drop as $table) {
             $wpdb->query("DROP TABLE IF EXISTS $table");
         }
         
