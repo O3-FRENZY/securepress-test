@@ -1,0 +1,95 @@
+[2025-05-26 09:44:12] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 09:44:12] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 09:44:12] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 09:44:14] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 09:44:14] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 09:47:48] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 09:47:48] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 09:47:48] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 09:47:51] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 09:47:51] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 09:50:52] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 09:50:52] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 09:50:52] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 09:50:54] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 09:50:54] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 09:53:06] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 09:53:06] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 09:53:06] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 09:53:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 09:53:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 10:06:16] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 10:06:16] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 10:06:17] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 10:06:19] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 10:06:19] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 10:07:58] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 10:07:58] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 10:07:58] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 10:08:00] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 10:08:00] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 10:10:05] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 10:10:05] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 10:10:05] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 10:10:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 10:10:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:29:09] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:29:09] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:29:09] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:29:11] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:29:11] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:33:10] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:33:10] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:33:10] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:33:12] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:33:12] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:41:21] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:41:21] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:41:21] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:41:22] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:41:22] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:49:10] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:49:10] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:49:10] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:49:12] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:49:12] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:51:02] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:51:02] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:51:02] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:51:04] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:51:04] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 11:59:25] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 11:59:25] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 11:59:25] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 11:59:27] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 11:59:27] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 12:55:31] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 12:55:31] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 12:55:31] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 12:55:33] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 12:55:33] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 12:56:35] [WARNING] [API] [Score:3] [IP:127.0.0.1] [User:admin] REST API call: GET /wp/v2/users/me
+[2025-05-26 12:56:35] [WARNING] [API] [Score:3] [IP:127.0.0.1] [User:admin] REST API call: GET /wp/v2/themes
+[2025-05-26 12:56:39] [WARNING] [API] [Score:3] [IP:127.0.0.1] [User:admin] REST API call: GET /wp/v2/users
+[2025-05-26 12:56:39] [WARNING] [API] [Score:3] [IP:127.0.0.1] [User:admin] REST API call: GET /wp/v2/users/1
+[2025-05-26 12:56:50] [INFO] [CONTENT] [Score:1] [IP:127.0.0.1] [User:admin] Post published: ID=3, Title=Privacy Policy
+[2025-05-26 13:00:16] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 13:00:16] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 13:00:16] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 13:00:17] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 13:00:17] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 13:01:28] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 13:01:28] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 13:01:28] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 13:01:30] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 13:01:30] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 13:17:06] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 13:17:06] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 13:17:06] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 13:17:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 13:17:07] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated
+[2025-05-26 13:26:12] [WARNING] [SYSTEM] [Score:3] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Deactivated
+[2025-05-26 13:26:12] [WARNING] [ADMIN] [Score:4] [IP:127.0.0.1] [User:admin] Plugin deactivated: SecureSphere/SecureSphere.php
+[2025-05-26 13:26:12] [CRITICAL] [CONFIG] [Score:8] [IP:127.0.0.1] [User:admin] Critical option changed: active_plugins
+[2025-05-26 13:26:13] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] File integrity baseline updated - 4 critical files monitored
+[2025-05-26 13:26:13] [INFO] [SYSTEM] [Score:2] [IP:127.0.0.1] [User:admin] SecureSphere MSSP Client Activated

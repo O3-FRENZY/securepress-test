@@ -1,0 +1,104 @@
+[19-May-2025 11:55:55 UTC] SecurePress activated on 2025-05-19 11:55:55
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 105
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG_LOG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 106
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG_DISPLAY already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 107
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 105
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG_LOG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 106
+[19-May-2025 12:06:38 UTC] PHP Warning:  Constant WP_DEBUG_DISPLAY already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 107
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 105
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG_LOG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 106
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG_DISPLAY already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 107
+[19-May-2025 12:06:40 UTC] SecurePress activated on 2025-05-19 12:06:40
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 105
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG_LOG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 106
+[19-May-2025 12:06:40 UTC] PHP Warning:  Constant WP_DEBUG_DISPLAY already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 107
+[19-May-2025 12:07:41 UTC] PHP Warning:  Constant WP_DEBUG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 105
+[19-May-2025 12:07:41 UTC] PHP Warning:  Constant WP_DEBUG_LOG already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 106
+[19-May-2025 12:07:41 UTC] PHP Warning:  Constant WP_DEBUG_DISPLAY already defined in C:\Users\rahee\Local Sites\securepress-test\app\public\wp-config.php on line 107
+[19-May-2025 12:09:43 UTC] SecurePress activated on 2025-05-19 12:09:43
+[19-May-2025 12:18:02 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:15 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:18 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:18 UTC] SecurePress activated on 2025-05-19 12:18:18
+[19-May-2025 12:18:18 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:24 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:24 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:27 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:27 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:18:27 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:19:02 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:19:31 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:19:31 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:19:32 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:19:48 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:20:35 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:01 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:02 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:05 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:05 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:09 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:11 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:21:11 UTC] SecurePress activated on 2025-05-19 12:21:11
+[19-May-2025 12:21:11 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:22:12 UTC] Testing WP_DEBUG_LOG functionality.
+[19-May-2025 12:24:12 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:13:46 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:13:50 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:13:56 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:13:59 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:14:01 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:14:06 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:14:19 UTC] Testing WP_DEBUG_LOG functionality.
+[20-May-2025 10:15:19 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 05:47:52 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 05:48:00 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 05:48:05 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 05:48:08 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 05:49:07 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:01:36 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:03:42 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:03:42 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:05:35 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:06:37 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:07:34 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:08:34 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:10:35 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:12:36 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:25:39 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:26:39 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:28:40 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:30:41 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:32:42 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:34:43 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:38:01 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:38:08 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:38:14 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:38:14 UTC] SecurePress activated on 2025-05-21 06:38:14
+[21-May-2025 06:38:14 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:39:14 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:40:15 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:42:16 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:44:17 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:46:17 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:48:18 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:48:43 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:48:47 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:48:47 UTC] SecurePress activated on 2025-05-21 06:48:47
+[21-May-2025 06:48:47 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:49:48 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:51:48 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:53:50 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:09 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:15 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:37 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:42 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:45 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:54:45 UTC] SecurePress activated on 2025-05-21 06:54:45
+[21-May-2025 06:54:45 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:55:45 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:56:45 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:57:46 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 06:59:47 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 07:01:48 UTC] Testing WP_DEBUG_LOG functionality.
+[21-May-2025 07:02:46 UTC] SecurePress Deactivated: 2025-05-21 07:02:46
+[21-May-2025 07:02:48 UTC] SecurePress Activated: 2025-05-21 07:02:48
