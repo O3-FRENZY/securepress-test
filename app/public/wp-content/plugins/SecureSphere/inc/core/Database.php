@@ -30,7 +30,9 @@ class SecureSphere_Database {
             'security_events' => $wpdb->prefix . 'securesphere_security_events',
             'user_activity' => $wpdb->prefix . 'securesphere_user_activity',
             'performance_metrics' => $wpdb->prefix . 'securesphere_performance_metrics',
-            'blocked_ips' => $wpdb->prefix . 'securesphere_blocked_ips'
+            'blocked_ips' => $wpdb->prefix . 'securesphere_blocked_ips',
+            'malware_signatures' => $wpdb->prefix . 'securesphere_malware_signatures',
+            'firewall_rules' => $wpdb->prefix . 'securesphere_firewall_rules'
         );
     }
     
@@ -40,7 +42,7 @@ class SecureSphere_Database {
         $errors = array();
 
         // Create logs table
-        $logs_table = $wpdb->prefix . 'securesphere_logs';
+        $logs_table = $this->tables['logs'];
         $logs_sql = "CREATE TABLE IF NOT EXISTS $logs_table (
             id bigint(20) NOT NULL AUTO_INCREMENT,
             timestamp datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -58,7 +60,7 @@ class SecureSphere_Database {
         ) $charset_collate;";
 
         // Create blocked IPs table
-        $blocked_ips_table = $wpdb->prefix . 'securesphere_blocked_ips';
+        $blocked_ips_table = $this->tables['blocked_ips'];
         $blocked_ips_sql = "CREATE TABLE IF NOT EXISTS $blocked_ips_table (
             id bigint(20) NOT NULL AUTO_INCREMENT,
             ip varchar(45) NOT NULL,
@@ -71,7 +73,7 @@ class SecureSphere_Database {
         ) $charset_collate;";
 
         // Create firewall logs table
-        $firewall_logs_table = $wpdb->prefix . 'securesphere_firewall_logs';
+        $firewall_logs_table = $this->tables['firewall_logs'];
         $firewall_logs_sql = "CREATE TABLE IF NOT EXISTS $firewall_logs_table (
             id bigint(20) NOT NULL AUTO_INCREMENT,
             timestamp datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -85,30 +87,68 @@ class SecureSphere_Database {
             KEY timestamp (timestamp)
         ) $charset_collate;";
 
+        // Create malware signatures table
+        $malware_signatures_table = $this->tables['malware_signatures'];
+        $malware_signatures_sql = "CREATE TABLE IF NOT EXISTS $malware_signatures_table (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            signature_id varchar(255) NOT NULL,
+            type varchar(50) NOT NULL COMMENT 'e.g., regex, md5_hash, sha256_hash',
+            pattern text NOT NULL,
+            description text,
+            severity varchar(50) NOT NULL DEFAULT 'medium',
+            threat_type varchar(100) DEFAULT NULL COMMENT 'e.g., backdoor, trojan, code_injection, redirector',
+            date_added datetime NOT NULL,
+            last_updated datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY signature_id (signature_id),
+            KEY type (type),
+            KEY severity (severity),
+            KEY threat_type (threat_type)
+        ) $charset_collate;";
+
+        // Create firewall rules table
+        $firewall_rules_table = $this->tables['firewall_rules'];
+        $firewall_rules_sql = "CREATE TABLE IF NOT EXISTS $firewall_rules_table (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            rule_id varchar(255) NOT NULL,
+            type varchar(50) NOT NULL COMMENT 'e.g., ip_block, user_agent_block, request_pattern, sqli_pattern, xss_pattern',
+            pattern text NOT NULL,
+            description text,
+            severity varchar(50) NOT NULL DEFAULT 'medium',
+            action varchar(50) NOT NULL DEFAULT 'block' COMMENT 'e.g., block, log',
+            date_added datetime NOT NULL,
+            last_updated datetime NOT NULL,
+            enabled tinyint(1) NOT NULL DEFAULT 1,
+            PRIMARY KEY  (id),
+            UNIQUE KEY rule_id (rule_id),
+            KEY type (type),
+            KEY severity (severity),
+            KEY enabled (enabled)
+        ) $charset_collate;";
+
         // Execute each table creation separately with error handling
-        $tables = array(
+        $tables_sql = array( // Renamed from $tables to $tables_sql to avoid conflict
             'logs' => $logs_sql,
             'blocked_ips' => $blocked_ips_sql,
-            'firewall_logs' => $firewall_logs_sql
+            'firewall_logs' => $firewall_logs_sql,
+            'malware_signatures' => $malware_signatures_sql,
+            'firewall_rules' => $firewall_rules_sql
         );
 
-        foreach ($tables as $table_name => $sql) {
+        foreach ($tables_sql as $table_key => $sql) {
             $result = $wpdb->query($sql);
             if ($result === false) {
-                $errors[] = "Failed to create {$table_name} table: " . $wpdb->last_error;
+                $errors[] = "Failed to create {$this->tables[$table_key]} table: " . $wpdb->last_error;
             }
         }
 
         // Verify tables were created
-        $required_tables = array(
-            $logs_table,
-            $blocked_ips_table,
-            $firewall_logs_table
-        );
+        $required_tables_keys = array_keys($tables_sql);
 
-        foreach ($required_tables as $table) {
-            if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
-                $errors[] = "Table $table was not created successfully";
+        foreach ($required_tables_keys as $table_key) {
+            $table_name_to_check = $this->tables[$table_key];
+            if ($wpdb->get_var("SHOW TABLES LIKE '$table_name_to_check'") != $table_name_to_check) {
+                $errors[] = "Table $table_name_to_check was not created successfully";
             }
         }
 

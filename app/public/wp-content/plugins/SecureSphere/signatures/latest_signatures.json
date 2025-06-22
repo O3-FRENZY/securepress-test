@@ -1,0 +1,47 @@
+[
+  {
+    "signature_id": "php_eval_base64_decode_001",
+    "type": "regex",
+    "pattern": "/eval\\s*\\(\\s*base64_decode\\s*\\(/i",
+    "description": "Suspicious execution of base64 decoded string, common in PHP backdoors.",
+    "severity": "high",
+    "threat_type": "backdoor",
+    "date_added": "2023-10-26 00:00:00"
+  },
+  {
+    "signature_id": "php_shell_exec_001",
+    "type": "regex",
+    "pattern": "/shell_exec\\s*\\(/i",
+    "description": "Direct execution of shell commands, potentially dangerous.",
+    "severity": "high",
+    "threat_type": "code_execution",
+    "date_added": "2023-10-26 00:00:00"
+  },
+  {
+    "signature_id": "php_passthru_001",
+    "type": "regex",
+    "pattern": "/passthru\\s*\\(/i",
+    "description": "Execution of external program and display raw output, potential for command injection.",
+    "severity": "medium",
+    "threat_type": "code_execution",
+    "date_added": "2023-10-26 00:00:00"
+  },
+  {
+    "signature_id": "js_iframe_hidden_001",
+    "type": "regex",
+    "pattern": "/<iframe[^>]+style\\s*=\\s*['\\\"][^>]*display\\s*:\\s*none[^>]*['\\\"]/i",
+    "description": "Hidden iframe, often used for malicious redirects or loading hidden content.",
+    "severity": "medium",
+    "threat_type": "redirector",
+    "date_added": "2023-10-26 00:00:00"
+  },
+  {
+    "signature_id": "hash_test_malware_md5_001",
+    "type": "md5_hash",
+    "pattern": "d41d8cd98f00b204e9800998ecf8427e",
+    "description": "Test MD5 hash (empty file) - FOR TESTING PURPOSES ONLY.",
+    "severity": "low",
+    "threat_type": "test_signature",
+    "date_added": "2023-10-26 00:00:00"
+  }
+]
